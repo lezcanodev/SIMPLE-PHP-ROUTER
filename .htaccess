@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c> #Pregunatamo si existe el modulo mod_rewrite
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*) index.php?route=$1
+</IfModule>
