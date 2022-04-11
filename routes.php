@@ -1,12 +1,16 @@
 <?php
+/**
+ * EXAMPLE ROUTES
+ */
 
 class User{
     public function home(){
-        echo "List of users";
+        echo "List of users ";
     }
 
     public function get(){
-        echo "Get user ".$_GET['id'];
+        echo "Get user ".$_GET['id']."<br>";
+        echo "Route: ".Route::getByName('user.get', ['{id}' => 2]);
     }
 
     public function create(){
@@ -27,6 +31,8 @@ class User{
 
 }
 
+
+
 Route::get('/', [User::class, 'home']);
 Route::get('/home', [User::class, 'home'])->name('user.home');
 
@@ -37,15 +43,20 @@ Route::put('/user', [User::class, 'update'])->name('user.update');
 Route::delete('/user/{id}', [User::class, 'delete'])->name('user.update');
 
 $isAdmin = function(){
-    return true;
+    return false;
 };
 
 $isLogin = function(){
     return true;
 };
 
+
 Route::get('/admin', [User::class, 'adminPanel'])->name('admin.panel')
-                                                 ->middleware($isAdmin)
-                                                 ->middleware($isLogin);
+                                                 ->middleware($isLogin)
+                                                 ->middleware($isAdmin);
+
+
+
+        
 
 

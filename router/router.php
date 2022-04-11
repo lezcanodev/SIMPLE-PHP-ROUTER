@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__.DIRECTORY_SEPARATOR.'exceptions'.DIRECTORY_SEPARATOR.'RouteMiddlewareExeception.php';
-require_once __DIR__.DIRECTORY_SEPARATOR.'exceptions'.DIRECTORY_SEPARATOR.'RouteNotFoundExeception.php';
-
-
 class Route{
 
     private static Array $routes = [];
@@ -11,6 +7,8 @@ class Route{
     private static Array $middlewares = [];
 
     private String $route;
+    private static String $baseUrl = 'localhost';
+
     private Array $controller;
 
 
@@ -27,8 +25,7 @@ class Route{
     /**
      * HTTP METHODS
      */
-    public static function get(String $route, Array $controller ){
-        
+    public static function get(String $route, Array $controller ){   
         return new Route($route, $controller, 'GET');
     }
 
@@ -53,17 +50,29 @@ class Route{
         return $this;
     }
 
-    public static function getByName(String $name){
+    public static function getByName(String $name, Array $params = []){
         if(isset(Route::$names[$name])){
-            return Route::$names[$name];
+            $route = Route::$baseUrl.Route::$names[$name];
+            
+            if(count($params) === 0) return $route;
+            
+            foreach($params as $param => $value){
+                $route = str_replace($param, $value, $route);
+            }
+
+            return $route;
+
         }
         return false;
     }
 
+    public static function setBaseUrl(String $url){
+        Route::$baseUrl = $url;
+    } 
+
     /**
      * add Middlewates
      */
-
     public function middleware($callback){
 
         if(!isset(self::$middlewares[$this->method][$this->route])) self::$middlewares[$this->method][$this->route] = [];
@@ -94,7 +103,7 @@ class Route{
 
                 foreach(self::$middlewares[$method][$key] as $middleware){
                     if(!call_user_func($middleware)){
-                        throw new RouteMiddlewareExeception();
+                        throw new RouteHttpException(403);
                     }
                 }
 
@@ -107,7 +116,7 @@ class Route{
             return;
         }
 
-        throw new RouteNotFoundExeception();
+        throw new RouteHttpException(404);
         
     }
 
@@ -197,3 +206,9 @@ class Route{
 
 }
 
+class RouteHttpException extends Exception{
+    
+    public function __construct($code){
+        parent::__construct('HTTP '.$code, $code);    
+    }
+}
