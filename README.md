@@ -61,10 +61,12 @@ Para utilizar middlewares solo hay que llamar al metodo **middleware($callback)*
 		Route::get('/admin', [User::class, 'adminPanel'])->middleware($isLogin)->middleware($isAdmin);
 - ##### **Nombrar rutas**
 Para nombrar las rutas solo llamamos al metodo **name**, luego de nombrar la ruta se pueden utilizar los middlewares
+
 		Route::get('/user/{id}', [User::class, 'get'])->name("user.get");
 
 - ##### **Obtener una ruta por su nombre**
 Solo llamamos al metodo estatico getByName, el cual recibe dos parametros el primero el nombre de la ruta y el segundo un arrays con los parametros de la ruta si es que los tiene, ejemplo:
+
 		Route::get('/user/{id}', [User::class, 'get'])->name("user.get");
 		Route::getByName("user.get", [
 		 "{id}" => 3
