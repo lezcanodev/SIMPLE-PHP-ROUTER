@@ -1,4 +1,4 @@
-# PHP ROUTER
+# SIMPLE PHP ROUTER
 Pasos para usarlo:
 - Descargar ".htaccess" el cual indicara las directivas al servidor
 - Descargar "router/router.php" es el archivo que se encargara de resolver las rutas
@@ -23,6 +23,7 @@ Para definir las rutas solo hay que llamar al metodo estatico de la clase **Rout
 		Route::delete('/user/{id}', [User::class, 'delete']);
 - ##### **Cargar las rutas**
 Para cargar las rutas solo llamamos al metodo estatico **load()**, en caso de no encontrar la ruta o que no tenga permiso para acceder a tal ruta lanzara una excepcion tipo **RouteHttpException**, ejemplo:
+
 		try{
 	
 	    Route::setBaseUrl('localhost');
